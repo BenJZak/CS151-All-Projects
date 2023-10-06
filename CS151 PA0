@@ -1,0 +1,28 @@
+'''
+Program designed to estimate how many students will not attend a class
+based on specific user based criteria.
+
+This program is for PA0 of my CS151 class.
+'''
+
+print("This program will help you estimate the attendance of your class!")
+
+studentCount = int(input("How many students are enrolled in your class?: "))
+isQuiz = input("Is there a quiz for your class today? Y/N: ").lower().strip() == 'y'
+isHomework = input("Is there a lot of Homework due today? Y/N: ").lower().strip() == 'y'
+isOptional = input("Is todays class optional? Y/N: ").lower().strip() == 'y'
+#inputs that gather a true boolean value based on whether or not the user inputs a y (not case sensitive)
+#.lower() converts a capital Y to a lowercase y, and .strip() removes any spaces if the user may input one on accident
+
+if(isQuiz == True):
+    studentCount = studentCount * .95
+if(isHomework == True):
+    studentCount = studentCount * .95
+if(isOptional == True):
+    studentCount = studentCount * .8
+#performs the calculations based on averaged data reported by various sources, if the boolean values are true
+
+studentCount = int(studentCount)
+#removes decimal values, as you cannot have half a student
+
+print("It is estimated that", studentCount, "students will attend your class based on the given criteria.")
