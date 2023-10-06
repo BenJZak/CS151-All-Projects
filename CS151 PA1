@@ -1,0 +1,336 @@
+# Programmers:  Ben
+# Course:  Computer Science 151
+# Due Date: Oct 6, 2023
+# Lab Assignment: PA1
+# Problem Statement:  Create a video game
+# Data In: So much data in
+# Data Out:  So much data out
+# Credits: https://www.w3schools.com/python/python_variables_global.asp
+
+#imports the random and time python modules 
+import random
+import time
+
+#declaring variables
+hp = 100
+damageMultiplier = 1.0
+gold = 0
+damage = 0 
+diceRoll = 0
+
+#dice function that when called will set the values of my diceRoll variable to a random value 1-6
+def dice():
+  global diceRoll
+  global damage
+  diceRoll = random.randint(1,6)
+  damage = diceRoll * damageMultiplier
+
+#attack function that when called will return the enemies HP after calculating how much damage user does with his attack given his damage multiplier and the value he got from his dice roll
+#this function is also how the enemy attacks the user, which is always just a random value 1-12
+def attack(enemyHP):
+  global hp
+  global damage
+  global diceRoll
+  damTaken = random.randint(1,20)
+  hp -= damTaken
+  print("You took", damTaken, "damage from your opponent! You now have", hp, "hp.")
+  time.sleep(1)
+  if input("It is your turn now! Roll the dice (Y) or automatically roll a 3 (N)? Y/N: ").lower().strip() == 'y':
+    dice()
+    enemyHP -= damage
+    time.sleep(1)
+    print("You rolled a", diceRoll, "! You deal", damage, "damage! Your opponent has", enemyHP, "hp left!")
+    return enemyHP
+  else:
+    diceRoll = 3
+    damage = diceRoll * damageMultiplier
+    enemyHP -= damage
+    time.sleep(1)
+    print("You deal", damage, "damage! Your opponent has", enemyHP, "hp left!")
+    return enemyHP
+
+#introduction scene
+name = input("Fivor: Greetings traveller! My name is Fivor Indubri, I have a special quest for you! First, tell me your name: ").strip()
+print()
+print("Fivor: Ah, pleasure to meet you " + name + ", what a strong name! I have word that there is an all you can eat pancake breakfast on the top of Mount Endor, you must go!")
+
+print()
+time.sleep(5)
+
+print("YOU: Isn't the path to Mount Endor filled with evil creatures?")
+
+print()
+time.sleep(5)
+
+#fivor gives you the option to take a sword with you that will increase your damage multiplier if chosen
+if input("Fivor: Yes, but that is why I am giving you the option to bring a sword, forged brand new from our local blacksmith, would you like to take it with you?: Y/N ").lower().strip() == 'y':
+  damageMultiplier = 2.0
+  print()
+  print("Fivor: Excellent choice, the blacksmith will be honored that you choose to wield his sword. Here's a map, I wish you good luck on your journey.")
+else:
+  print()
+  print("Fivor: Very noble indeed, choosing to proceed without a weapon, your story will be legendary. Here's a map, I wish you good luck on your journey.")
+
+print()
+time.sleep(5)
+
+#First encounter: Large Rat (10HP)
+
+print("You embark on your journey, when roughly 5 miles outside of your village you encounter a large rat...")
+time.sleep(5)
+
+print()
+
+ratHP = 10
+#gives the user the choice to fight the battle, all attack scenes use this same format of code
+if input("Large Rat (10HP): RAHHH! Who do you think you are traveller, stepping into my domain? Fight me if you wish to proceed. \n Would you like to take this fight? Y/N: ").lower().strip() == 'y':
+  print()
+  if input("You have the chance to srike first! Roll the dice (Y) or automatically roll a 3 (N)? Y/N: ").lower().strip() == 'y':
+    dice()
+    print("You rolled a", diceRoll, "! You deal", damage, "damage to the Large Rat!")
+    ratHP -= damage
+    while ratHP > 0:
+      ratHP = attack(ratHP)
+  else:
+    diceRoll = 3
+    damage = diceRoll * damageMultiplier
+    ratHP -= damage
+    print("The rat has", ratHP, "hp left!")
+    while ratHP > 0:
+      ratHP = attack(ratHP)
+  print("The Large Rat has been defeated. You now have", hp, "hp. You have won the battle!")
+  print()
+  time.sleep(5)
+  print("From winning that battle, you have received 5 gold!")
+  gold += 5 #received from winning the battle
+  print()
+  time.sleep(5)
+else:
+  print("You have fled, and you continue your quest to acquire the pancake breakfast.")
+
+#Shop Scene | can spend gold earned from previous battle 
+
+if input("You see a shop ahead, would you like to enter? Y/N: ").lower().strip() == 'y':
+  print()
+  print("Sales Clerk: Hello " + name + ", can I interest you in any goods?")
+  print()
+  time.sleep(3)
+  print("YOU: How do you know my name?")
+  print()
+  time.sleep(2)
+  print("Sales Clerk: Nevermind that, here is what I am selling:")
+  print()
+  time.sleep(4)
+  print("Gold Sword (3.0x damage multiplier) -> 5 Gold")
+  time.sleep(1)
+  print("Health Potion (will restore you to 100 hp) -> 2 Gold")
+  print() 
+  #Gives the user the option to buy a sword or a potion of healing
+  if input("Would you like to buy the Golden Sword? Y/N: ").lower().strip() == 'y':
+    if(gold >= 5):
+      damageMultiplier = 3.0
+      gold -= 5
+      print("Sales Clerk: Excellent choice! Good luck in your travels!")
+    else:
+      print("Not enough gold!")
+  elif input("Would you like to buy the Health Potion? Y/N: ").lower().strip() == 'y':
+    if(gold >= 2):
+      hp = 100
+      gold -= 2
+      print("Sales Clerk: Excellent choice! Good luck in your travels!")
+    else:
+      print("Not enough gold!")
+  print("You have", gold, "gold remaining. Onwards!!")
+else:
+  print("You have", gold, "gold remaining. Onwards!!")
+print()
+#End shop scene, start Cheb the Dragon fight
+print("You continue on your quest to obtain the pancake breakfast.")
+print()
+
+dragonHP = 40
+#same fight style as with the large rat
+if input("Cheb (40HP): ROARRR! My name is Cheb the Lethargic Dragon! Fight me if you wish to proceed, but please don't I'm pretty tired I'd rather take a nap. \n Would you like to take this fight? Y/N: ").lower().strip() == 'y':
+  print()
+  if input("You have the chance to srike first! Roll the dice (Y) or automatically roll a 3 (N)? Y/N: ").lower().strip() == 'y':
+    dice()
+    print("You rolled a", diceRoll, "! You deal", damage, "damage to Cheb!")
+    dragonHP -= damage
+    while dragonHP > 0:
+      dragonHP = attack(dragonHP)
+      if hp <= 0:
+        print()
+        print("You died?!?! No pancakes for you. :( Try again!")
+        exit()
+  else:
+    diceRoll = 3
+    damage = diceRoll * damageMultiplier
+    dragonHP -= damage
+    print("Cheb has", dragonHP, "hp left!")
+    while dragonHP > 0:
+      dragonHP = attack(dragonHP)
+      #dying here is possible, so the code exits if that happens
+      if hp <= 0:
+        print()
+        print("You died?!?! No pancakes for you. :( Try again!")
+        exit()
+  print("Cheb has been defeated. You now have", hp, "hp. You have won the battle!")
+  print()
+  time.sleep(5)
+  print("From winning that battle, you have received 11 gold!")
+  gold += 11 #received from winning the battle, more than last time
+  print()
+else:
+  time.sleep(1)
+  print("You have fled, and you continue your quest to acquire the pancake breakfast.")
+print()
+
+#end cheb scene, begin whispering wizard scene
+time.sleep(5)
+print("As you continue on your journey, you see a small figure in the distance, he seems friendly...")
+print()
+time.sleep(5)
+print("YOU: ...hello?")
+print()
+time.sleep(2)
+print("Whispering Wizard: I'm the Whispering Wizard, are you in need of any merchandise?")
+print()
+time.sleep(5)
+print("YOU: ...I can't hear you could you speak up...")
+print()
+time.sleep(3)
+#here you input a value which will give you the requested item assuming you have saved enough gold
+#the diamond sword can only be purchased if you saved gold from the first battle
+if input("Whispering Wizard: Do you need any commodities (slightly louder this time) Y/N: ").lower().strip() == 'y':
+  print()
+  print("1 Diamond Sword (5.0x damage multiplier) -> 13 Gold")
+  time.sleep(1)
+  print("2 Health Potion (will restore you to 100 hp) -> 2 Gold")
+  time.sleep(1)
+  print("3 Small Health Potion (restores 20hp) -> 1 Gold")
+  print()
+  time.sleep(2)
+  while gold >= 0:
+    print("You have",gold,"gold.")
+    print()
+    itemChoice = input("Would you like item 1, 2, or 3? Or type, goodbye, if you want to leave: ").strip().lower()
+    if itemChoice == "1":
+      if gold >= 13:
+        damageMultiplier = 5.0
+        gold -= 13
+        print("Whispering Wizard: Okay, here you go...")
+      else:
+        print("Not enough gold.. Choose something else!")
+    elif itemChoice == "2":
+      if gold >= 2:
+        hp = 100
+        gold -= 2
+        print("Whispering Wizard: Okay, here you go...")
+      else:
+        print("Not enough gold.. Choose something else!")
+    elif itemChoice == "3":
+      if gold >= 1:
+        hp += 20
+        gold -= 1
+        print("Whispering Wizard: Okay, here you go...")
+      else:
+        print("Not enough gold.. Choose something else!")
+    else:
+      print("Goodbye.")
+      break
+else:
+  print()
+  print("Whispering Wizard: okay.. goodluck then..")
+#final fight scene
+print()
+time.sleep(3)
+print("You continue your journey... You can sense that the pancake breakfast is close...")
+print()
+time.sleep(5)
+print("YOU: I am finally here!! After this long difficult journey, I can finally treat myself to a nice pancake breakfast!")
+print()
+time.sleep(5)
+print("Pancake Defender (100HP): Not so fast!! It is I... the final pancake defender!! I have been gaurding these pancakes for thousands of years, I will not let you through!")
+time.sleep(5)
+print()
+print("YOU: Darn it... I just want some pancakes..")
+time.sleep(5)
+print()
+
+defenderHP = 100
+if hp > 0:
+  if input("You have the chance to srike first! Roll the dice (Y) or automatically roll a 3 (N)? Y/N: ").lower().strip() == 'y':
+    dice()
+    print("You rolled a", diceRoll, "! You deal", damage, "damage to the Pancake Defender!")
+    defenderHP -= damage
+    while defenderHP > 0:
+      defenderHP = attack(defenderHP)
+      if hp <= 0:
+        print()
+        print("You died?!?! No pancakes for you. :( Try again!")
+        exit()
+  else:
+    diceRoll = 3
+    damage = diceRoll * damageMultiplier
+    defenderHP -= damage
+    print("The Pancake Defender has", defenderHP, "hp left!")
+    while defenderHP > 0:
+      defenderHP = attack(defenderHP)
+      #another place you can die
+      #if you ran from the first two battles, this battle should be pretty difficult
+      if hp <= 0:
+        print()
+        print("You died?!?! No pancakes for you. :( Try again!")
+        exit()
+print()
+time.sleep(1)
+print("The Pancake Defender has been defeated. You now have", hp, "hp. You have won the battle!")
+print()
+#orphan scene
+time.sleep(4)
+print("YOU: Finally, he should be the last creature inbetween me and my pancakes.")
+print()
+time.sleep(4)
+print("You sit down to eat your well earned pancakes when you are approached by a lost orphan..")
+print()
+time.sleep(4)
+print("Orphan: Good afternoon warrior, could you spare me a pancake or even half of a pancake is fine...")
+time.sleep(5)
+print()
+orphanPancakes = float(input("Input a float value for how many pancakes you'd like to donate to the orphan (if you're a nice person). You have 100 pancakes total: "))
+time.sleep(3)
+pancakes = 100
+print()
+if orphanPancakes > 100:
+  print("Orphan: You dont even have that many pancakes! Some hero you are, trying to scam an orphan!")
+  time.sleep(2)
+  print("You win!... Sorta... Thanks for playing!")
+  exit()
+#prints an output based on how many pancaked you donate to the orphan
+if orphanPancakes < 100:
+  if orphanPancakes < 50:
+    if orphanPancakes < 20:
+      if orphanPancakes < 5:
+        if orphanPancakes < 1:
+          print("Orphan: Gee, thanks I guess...")
+      else:
+        print("Orphan: Thanks for the pancakes...")
+    else:
+      print("Orphan: Wow, thanks for the pancakes warrior!")
+  else:
+    print("Orphan: Wow, thats super generous of you, thanks warrior!")
+else:
+  print("Orphan: Holy cow that is a lot of pancakes, thanks hero!")
+
+pancakes -= orphanPancakes
+print()
+if(pancakes == 0):
+  time.sleep(3)
+  print("You have no pancakes left for youself! Very selfless of you :)")
+else:
+  time.sleep(3)
+  print("You can now enjoy the", pancakes, "pancakes you have left!")
+#GG
+print()
+time.sleep(2)
+print("You win!! Thanks for playing!")
